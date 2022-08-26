@@ -20,4 +20,8 @@ describe('Testes da função HandlerElephants', () => {
   it('Caso a função receba undefined deve retornar undefined', () => {
     expect(handlerElephants(undefined)).toBeUndefined();
   });
+
+  it('Caso a função receba `location` deve retornar a string `NW`', () => {
+    expect(handlerElephants('location')).toBe('NW');
+  });
 });
