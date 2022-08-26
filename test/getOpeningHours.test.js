@@ -20,4 +20,24 @@ describe('Testes da função getOpeningHours', () => {
   it('Caso a função receba como parametro `Friday` e `9:00-PM` deve retornar a string `The zoo is closed`', () => {
     expect(getOpeningHours('Friday', '09:00-PM')).toBe('The zoo is closed');
   });
+
+  it('Caso a função receba como parametro `Thu` e `09:00-AM` deve lançar a exceção com a mensagem: `The day must be valid. Example: Monday`', () => {
+    expect(() => getOpeningHours('Thu', '09:00-AM')).toThrow('The day must be valid. Example: Monday');
+  });
+
+  it('Caso a função receba como parametro `Friday` e `09:00-ZM` deve lançar a exceção com a mensagem: `The abbreviation must be \'AM\' or \'PM\'`', () => {
+    expect(() => getOpeningHours('Friday', '09:00-ZM')).toThrow('The abbreviation must be \'AM\' or \'PM\'');
+  });
+
+  it('Caso a função receba como parametro `Friday` e `D5:00-AM` deve lançar a exceção com a mensagem:`The hour should represent a number`', () => {
+    expect(() => getOpeningHours('Friday', 'D5:00-AM')).toThrow('The hour should represent a number');
+  });
+
+  it('Caso a função receba como parametro `Saturday` e `14:00-PM` deve lançar a exceção com a mensagem:`The hour must be between 0 and 12`', () => {
+    expect(() => getOpeningHours('Saturday', '14:00-PM')).toThrow('The hour must be between 0 and 12');
+  });
+
+  it('Caso a função receba como parametro `Sunday` e `03:65-PM` deve lançar a exceção com a mensagem:`The minutes must be between 0 and 59`', () => {
+    expect(() => getOpeningHours('Sunday', '03:65-PM')).toThrow('The minutes must be between 0 and 59');
+  });
 });
