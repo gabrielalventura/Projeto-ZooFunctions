@@ -24,4 +24,8 @@ describe('Testes da função HandlerElephants', () => {
   it('Caso a função receba `location` deve retornar a string `NW`', () => {
     expect(handlerElephants('location')).toBe('NW');
   });
+
+  it('Caso a função receba como parametro uma string que não corresponda a nenhuma chave deve retornar null', () => {
+    expect(handlerElephants('gato')).toBeNull();
+  });
 });
