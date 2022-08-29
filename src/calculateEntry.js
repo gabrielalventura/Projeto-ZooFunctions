@@ -28,5 +28,4 @@ function calculateEntry(entrants = {}) {
   return acessKeys.reduce((total, each) => total + (totalEntrants[each] * prices[each]), 0);
 }
 
-
 module.exports = { calculateEntry, countEntrants };
