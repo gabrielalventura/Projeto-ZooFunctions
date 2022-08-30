@@ -46,6 +46,23 @@ const weekSchedule = {
   },
 };
 
+function weekDay(day) {
+  if (day === 'Monday') {
+    return {
+      Monday: {
+        officeHour: 'CLOSED',
+        exhibition: 'The zoo will be closed!',
+      },
+    };
+  }
+  return {
+    [day]: {
+      officeHour: catchOfficeHour(day),
+      exhibition: catchSpecies(day),
+    },
+  };
+}
+
 function getSchedule(scheduleTarget) {
   if (species.map((pet) => pet.name)
     .includes(scheduleTarget)) {
@@ -55,7 +72,10 @@ function getSchedule(scheduleTarget) {
     return weekSchedule;
   }
   if (Object.keys(hours).includes(scheduleTarget)) {
-    return catchSpecies(scheduleTarget);
+    return weekDay(scheduleTarget);
+  }
+  if (scheduleTarget !== species.name) {
+    return weekSchedule;
   }
 }
 
