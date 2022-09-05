@@ -1,54 +1,61 @@
 const data = require('../data/zoo_data');
 const { species, employees } = require('../data/zoo_data');
 
-function validatePerson(choosedData) {
-  const info = (Object.values(data))[0];
-  return employees.filter((worker) =>
-    worker.id === info || worker.firstName === info || worker.lastName === info);
+function captureEmployeeInformations(dado) {
+  const information = (Object.values(dado))[0];
+  return employees.filter((info) =>
+    info.id === information || info.firstName === information || info.lastName === information);
 }
 
-function captureSpeciesName(worker) {
-  const speciesId = employees.filter((person) => person.id === worker).responsibleFor;
-  const speciesForPerson = [];
-  speciesId.forEach((captureId) => {
-    const listOfSpecies = species.find((animal) => animal.id === captureId).name;
-    speciesForPerson.push(listOfSpecies);
+function isAEmployee(info) {
+  const theInfo = (Object.values(info))[0];
+  return employees.some((employee) =>
+    employee.firstName === theInfo || employee.lastName === theInfo || employee.id === theInfo);
+}
+
+function captureSpecies(param) {
+  const responsiblePerson = employees.find((person) => person.id === param).responsibleFor;
+  const listOfSpecies = [];
+  responsiblePerson.forEach((specie) => {
+    listOfSpecies.push(species.find((pet) => pet.id === specie).name);
   });
-  return speciesForPerson;
+  return listOfSpecies;
 }
 
-function captureSpeciesLocation(worker) {
-  const speciesId = employees.filter((person) => person.id === worker).responsibleFor;
-  const locationsForSpecies = [];
-  speciesId.forEach((captureId) => {
-    const listOfSpecies = species.find((animal) => animal.id === captureId).location;
-    locationsForSpecies.push(listOfSpecies);
+function captureLocations(worker) {
+  const responsibleLocation = employees.find((person) => person.id === worker).responsibleFor;
+  const listOfLocations = [];
+  responsibleLocation.forEach((local) => {
+    listOfLocations.push(species.find((pet) => pet.id === local).location);
   });
-  return locationsForSpecies;
+  return listOfLocations;
 }
 
-function createObject(param) {
+function allEmployees() {
+  return employees.map((worker) => ({
+    id: worker.id,
+    fullName: `${worker.firstName} ${worker.lastName}`,
+    species: captureSpecies(worker.id),
+    locations: captureLocations(worker.id),
+  }));
+}
+
+function selectedEmployee(person) {
+  const employee = captureEmployeeInformations(person);
   return {
-    id: param.id,
-    fullName: `${param.firstName} ${param.lastName}`,
-    species: captureSpeciesName(param.id),
-    locations: captureSpeciesLocation(param.id),
+    id: employee[0].id,
+    fullName: `${employee[0].firstName} ${employee[0].lastName}`,
+    species: captureSpecies(employee[0].id),
+    locations: captureLocations(employee[0].id),
   };
 }
 
-const withoutParam = employees.map((person) => ({
-  id: person.id,
-  fullName: `${person.firstName} ${person.lastName}`,
-  species: captureSpeciesName(person.id),
-  locations: captureSpeciesLocation(person.id),
-}));
-
-function getEmployeesCoverage(param) {
-  if (validatePerson(param) !== false) {
-    return createObject(param);
+function getEmployeesCoverage(worker) {
+  if (worker === undefined) {
+    return allEmployees();
   }
-  if (param === undefined) {
-    return withoutParam;
+  if (isAEmployee(worker) !== false) {
+    return selectedEmployee(worker);
   }
   throw new Error('Informações inválidas');
 }
